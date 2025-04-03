@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electricity Bill Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f2f5;
+    }
+    .container {
+      width: 90%;
+      max-width: 700px;
+      margin: 20px auto;
+    }
+    .calculator {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .calculator-header {
+      background-color: #2980b9;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-content {
+      flex-grow: 1;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .calculator-body {
+      padding: 20px;
+    }
+    .section-title {
+      background-color: #eef2f7;
+      margin: 0 -20px 15px -20px;
+      padding: 10px 20px;
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 16px;
+    }
+    .device-row {
+      display: grid;
+      grid-template-columns: 110px repeat(3, 1fr);
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+    .device-name {
+      font-weight: bold;
+      color: #2980b9;
+    }
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    .input-wrapper label {
+      font-size: 12px;
+      color: #7f8c8d;
+      margin-bottom: 2px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .results {
+      background-color: #f8f9fa;
+      margin: 15px -20px 0 -20px;
+      padding: 15px 20px;
+      border-top: 1px solid #eee;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .result-item {
+      background-color: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .result-label {
+      font-size: 12px;
+      color: #7f8c8d;
+      margin-bottom: 5px;
+    }
+    .result-value {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .bill-result {
+      background-color: #2980b9;
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .bill-label {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .bill-amount {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .calculator-footer {
+      background-color: #f8f9fa;
+      padding: 10px;
+      text-align: center;
+      border-top: 1px solid #eee;
+      font-size: 12px;
+      color: #7f8c8d;
+    }
+    .reset-button {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+    .reset-button:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="calculator">
+      <div class="calculator-header">
+        <div class="header-content">
+          <h1>Electricity Bill Calculator</h1>
+        </div>
+        <button id="reset-button" class="reset-button">Reset All Values</button>
+      </div>
+      
+      <div class="calculator-body">
+        <!-- Daily Devices Section -->
+        <div class="section-title">Daily Usage Devices (Hours/Day)</div>
+        
+        <div class="device-row">
+          <div class="device-name">Fan</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="fan-quantity" min="0" value="2">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="fan-wattage" min="0" value="80">
+          </div>
+          <div class="input-wrapper">
+            <label>Hours/day</label>
+            <input type="number" id="fan-hours" min="0" max="24" value="8">
+          </div>
+        </div>
+        
+        <div class="device-row">
+          <div class="device-name">Light</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="light-quantity" min="0" value="4">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="light-wattage" min="0" value="20">
+          </div>
+          <div class="input-wrapper">
+            <label>Hours/day</label>
+            <input type="number" id="light-hours" min="0" max="24" value="6">
+          </div>
+        </div>
+        
+        <div class="device-row">
+          <div class="device-name">WiFi Router</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="router-quantity" min="0" value="1">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="router-wattage" min="0" value="15">
+          </div>
+          <div class="input-wrapper">
+            <label>Hours/day</label>
+            <input type="number" id="router-hours" min="0" max="24" value="24">
+          </div>
+        </div>
+        
+        <div class="device-row">
+          <div class="device-name">Charger</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="charger-quantity" min="0" value="2">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="charger-wattage" min="0" value="10">
+          </div>
+          <div class="input-wrapper">
+            <label>Hours/day</label>
+            <input type="number" id="charger-hours" min="0" max="24" value="4">
+          </div>
+        </div>
+        
+        <div class="device-row">
+          <div class="device-name">Refrigerator</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="fridge-quantity" min="0" value="1">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="fridge-wattage" min="0" value="150">
+          </div>
+          <div class="input-wrapper">
+            <label>Hours/day</label>
+            <input type="number" id="fridge-hours" min="0" max="24" value="24">
+          </div>
+        </div>
+        
+        <div class="device-row">
+          <div class="device-name">TV</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="tv-quantity" min="0" value="1">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="tv-wattage" min="0" value="120">
+          </div>
+          <div class="input-wrapper">
+            <label>Hours/day</label>
+            <input type="number" id="tv-hours" min="0" max="24" value="4">
+          </div>
+        </div>
+        
+        <div class="device-row">
+          <div class="device-name">IPS/UPS</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="ips-quantity" min="0" value="1">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="ips-wattage" min="0" value="300">
+          </div>
+          <div class="input-wrapper">
+            <label>Hours/day</label>
+            <input type="number" id="ips-hours" min="0" max="24" value="2">
+          </div>
+        </div>
+        
+        <!-- Monthly Devices Section -->
+        <div class="section-title">Monthly Usage Devices (Minutes/Month)</div>
+        
+        <div class="device-row">
+          <div class="device-name">Iron</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="iron-quantity" min="0" value="1">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="iron-wattage" min="0" value="1000">
+          </div>
+          <div class="input-wrapper">
+            <label>Min/month</label>
+            <input type="number" id="iron-minutes" min="0" value="120">
+          </div>
+        </div>
+        
+        <div class="device-row">
+          <div class="device-name">Blender</div>
+          <div class="input-wrapper">
+            <label>Quantity</label>
+            <input type="number" id="blender-quantity" min="0" value="1">
+          </div>
+          <div class="input-wrapper">
+            <label>Wattage (W)</label>
+            <input type="number" id="blender-wattage" min="0" value="500">
+          </div>
+          <div class="input-wrapper">
+            <label>Min/month</label>
+            <input type="number" id="blender-minutes" min="0" value="60">
+          </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results">
+          <div class="result-grid">
+            <div class="result-item">
+              <div class="result-label">Daily Consumption</div>
+              <div id="daily-consumption" class="result-value">0 kWh</div>
+            </div>
+            <div class="result-item">
+              <div class="result-label">Monthly Consumption</div>
+              <div id="monthly-consumption" class="result-value">0 kWh</div>
+            </div>
+          </div>
+          
+          <div class="bill-result">
+            <div class="bill-label">Estimated Monthly Bill</div>
+            <div id="monthly-bill" class="bill-amount">৳ 0</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="calculator-footer">
+        Based on Bangladesh electricity rates: First 75 kWh at 5.25 Taka/unit, above 75 kWh at 7.2 Taka/unit
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get all input elements
+    const inputs = document.querySelectorAll('input[type="number"]');
+    const dailyConsumptionEl = document.getElementById('daily-consumption');
+    const monthlyConsumptionEl = document.getElementById('monthly-consumption');
+    const monthlyBillEl = document.getElementById('monthly-bill');
+    const resetButton = document.getElementById('reset-button');
+    
+    // Add event listeners to all inputs
+    inputs.forEach(input => {
+      input.addEventListener('input', calculateBill);
+    });
+    
+    // Add event listener to reset button
+    resetButton.addEventListener('click', resetAllValues);
+    
+    // Function to reset all input values to zero
+    function resetAllValues() {
+      inputs.forEach(input => {
+        input.value = 0;
+      });
+      calculateBill();
+    }
+    
+    // Calculate initial bill on page load
+    calculateBill();
+    
+    function calculateBill() {
+      // Daily consumption devices
+      const dailyDevices = [
+        { 
+          quantity: parseFloat(document.getElementById('fan-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('fan-wattage').value) || 0,
+          hours: parseFloat(document.getElementById('fan-hours').value) || 0
+        },
+        { 
+          quantity: parseFloat(document.getElementById('light-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('light-wattage').value) || 0,
+          hours: parseFloat(document.getElementById('light-hours').value) || 0
+        },
+        { 
+          quantity: parseFloat(document.getElementById('router-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('router-wattage').value) || 0,
+          hours: parseFloat(document.getElementById('router-hours').value) || 0
+        },
+        { 
+          quantity: parseFloat(document.getElementById('charger-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('charger-wattage').value) || 0,
+          hours: parseFloat(document.getElementById('charger-hours').value) || 0
+        },
+        { 
+          quantity: parseFloat(document.getElementById('fridge-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('fridge-wattage').value) || 0,
+          hours: parseFloat(document.getElementById('fridge-hours').value) || 0
+        },
+        { 
+          quantity: parseFloat(document.getElementById('tv-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('tv-wattage').value) || 0,
+          hours: parseFloat(document.getElementById('tv-hours').value) || 0
+        },
+        { 
+          quantity: parseFloat(document.getElementById('ips-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('ips-wattage').value) || 0,
+          hours: parseFloat(document.getElementById('ips-hours').value) || 0
+        }
+      ];
+      
+      // Monthly usage devices (Iron and Blender)
+      const monthlyUsageDevices = [
+        {
+          quantity: parseFloat(document.getElementById('iron-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('iron-wattage').value) || 0,
+          minutes: parseFloat(document.getElementById('iron-minutes').value) || 0
+        },
+        {
+          quantity: parseFloat(document.getElementById('blender-quantity').value) || 0,
+          wattage: parseFloat(document.getElementById('blender-wattage').value) || 0,
+          minutes: parseFloat(document.getElementById('blender-minutes').value) || 0
+        }
+      ];
+      
+      // Calculate daily consumption from daily devices
+      let totalDailyConsumption = 0;
+      
+      for (const device of dailyDevices) {
+        // Daily Consumption per Device (kWh) = (Wattage ÷ 1000) × Usage Time × Quantity
+        const deviceDailyConsumption = (device.wattage / 1000) * device.hours * device.quantity;
+        totalDailyConsumption += deviceDailyConsumption;
+      }
+      
+      // Calculate monthly consumption from daily devices
+      const monthlyConsumptionFromDailyDevices = totalDailyConsumption * 30;
+      
+      // Calculate consumption from monthly usage devices
+      let monthlyConsumptionFromSpecialDevices = 0;
+      
+      for (const device of monthlyUsageDevices) {
+        // Monthly Consumption (kWh) = (Wattage ÷ 1000) × (Minutes/60) × Quantity
+        const deviceMonthlyConsumption = (device.wattage / 1000) * (device.minutes / 60) * device.quantity;
+        monthlyConsumptionFromSpecialDevices += deviceMonthlyConsumption;
+      }
+      
+      // Calculate total monthly consumption
+      const totalMonthlyConsumption = monthlyConsumptionFromDailyDevices + monthlyConsumptionFromSpecialDevices;
+      
+      // Calculate electricity bill
+      let monthlyBill = 0;
+      
+      if (totalMonthlyConsumption <= 75) {
+        // If consumption is less than or equal to 75 kWh
+        monthlyBill = totalMonthlyConsumption * 5.25;
+      } else {
+        // If consumption is greater than 75 kWh
+        // First 75 kWh at 5.25 Taka
+        // Remaining kWh at 7.2 Taka
+        const remainingKwh = totalMonthlyConsumption - 75;
+        monthlyBill = (75 * 5.25) + (remainingKwh * 7.2);
+      }
+      
+      // Update the display
+      dailyConsumptionEl.textContent = totalDailyConsumption.toFixed(2) + ' kWh';
+      monthlyConsumptionEl.textContent = totalMonthlyConsumption.toFixed(2) + ' kWh';
+      monthlyBillEl.textContent = '৳ ' + monthlyBill.toFixed(2);
+    }
+  </script>
+</body>
+</html>
